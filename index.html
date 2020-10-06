@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   <!-- BOOTSWATCH -->
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/pulse/bootstrap.min.css">
+
+   <!-- ANIMATE CSS -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
+  </head>
+<body>
+
+  <form id="task-form">
+    <p type="text" id="task-description" class="form-control"></p>
+    
+    <button class="btn btn-primary" id="btn-task-form">
+      Save
+    </button>
+  </form>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm" >
+        <textarea  id="tasks-Container" cols="30" rows="10"></textarea>
+      </div>
+      <div class="col-sm" >
+        <textarea  id="tasks-Container2" cols="30" rows="10"></textarea>
+      </div>
+      <div class="col-sm" >
+        <textarea id="tasks-Container3" cols="30" rows="10"></textarea>
+      </div>
+    </div>
+  </div>
+
+  
+
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-firestore.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+      https://firebase.google.com/docs/web/setup#available-libraries -->
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyCFG-_RjV-FMeiP01w8yDkI4wzYcRCgmQU",
+      authDomain: "madio-4cbac.firebaseapp.com",
+      databaseURL: "https://madio-4cbac.firebaseio.com",
+      projectId: "madio-4cbac",
+      storageBucket: "madio-4cbac.appspot.com",
+      messagingSenderId: "1080066627913",
+      appId: "1:1080066627913:web:ca5ed65ad489eb2c"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script src="index.js"></script>
+
+</body>
+</html>
