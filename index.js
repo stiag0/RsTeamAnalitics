@@ -98,8 +98,10 @@ let i = 0;
 
                             strProdPedidos += a.id+','+a.usuario.uid+',';
                             datoClean =clinerComas(element.nombre);
-                            //console.log(element.nombre+" "+datoClean);
-                            if (element.proveedor != 'undefined') {
+                            //console.log(typeof(element.proveedor));
+                            if (typeof(element.proveedor) == "number") {
+                                console.log("*  "+element.proveedor);
+
                                 strProdPedidos += datoClean+','+element.cantidad+','+element.costo+','+element.id+','+element.proveedor+'\n';    
                             } else {
                                 strProdPedidos += datoClean+','+element.cantidad+','+element.costo+','+element.id+','+'111'+'\n';
@@ -107,8 +109,12 @@ let i = 0;
                         }
                     }else{
                         datoClean =clinerComas(prod.nombre);
-                        //console.log(prod.nombre+" "+datoClean);
-                        strProdPedidos += a.id+','+a.usuario.uid+','+datoClean+','+a.productos[index].cantidad+','+prod.costo+','+prod.id+'\n';
+                        //console.log(typeof(prod.proveedor));
+                        if (typeof(prod.proveedor) == "number") {
+                            strProdPedidos += a.id+','+a.usuario.uid+','+datoClean+','+a.productos[index].cantidad+','+prod.costo+','+prod.id+','+prod.proveedor+'\n';
+                        }else{
+                            strProdPedidos += a.id+','+a.usuario.uid+','+datoClean+','+a.productos[index].cantidad+','+prod.costo+','+prod.id+','+'111'+'\n';
+                        }
                     }
                 }else{
                     console.log("producto no encontrado "+a.productos[index.id]+" nombre: "+a.productos[index].nombre);
