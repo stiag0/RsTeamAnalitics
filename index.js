@@ -4,14 +4,18 @@ const taskForm = document.getElementById('task-form');
 const taskContainer = document.getElementById("tasks-Container");
 const taskContainer2 = document.getElementById("tasks-Container2")
 const taskContainer3 = document.getElementById("tasks-Container3")
+const taskContainer4 = document.getElementById("tasks-Container4")
+
 
 //let fs = require('fs');
 
 const getTasks = () => db.collection("RECIBOS").get();
 const getProd = () => db.collection("PRODUCTOS").get();
+const  getProv = () => db.collection("PROVEEDORES").get();
 let strUsuarios = "idUser,nombreUser,telUser,idPedido"+'\n';
 let strPedidos = "idPedido,idUser,nombreUser,fechaPedido,direccionEntrega,totalPagado"+'\n';
-let strProdPedidos = "idPedido,idUser,nombreProducto,cantidadVendida,costoProd,idProducto"+'\n';
+let strProdPedidos = "idPedido,idUser,nombreProducto,cantidadVendida,costoProd,idProducto,idProveedor"+'\n';
+let strProveedor = "idProve,nitProve,nombreProv,sector,direccion,telefono,regimen,rotacionInventario"+'\n';
 let listaProd= [];
  //const onGetTasks = (callback) => db.collection("RECIBOS").onSnapshot(callback);
 let i = 0;
@@ -22,7 +26,7 @@ let i = 0;
  window.addEventListener("DOMContentLoaded", async (e) => {
     const querySnapshot = await getTasks();
     const inventario =  await getProd();
-
+    const proveedores = await getProv();
     function clinerComas(contenido, char ) {
         let direccionClean = contenido;
         if (contenido != null ) {
@@ -63,17 +67,14 @@ let i = 0;
             //let b = a ;
             //console.log(doc.data().pedido); 
             console.log(i);
+
             // usuario   
             //console.log(a.usuario.uid+','+a.usuario.nombre+','+a.usuario.telefono+','+a.id);
             let datoClean;
             strUsuarios += a.usuario.uid+',';
             datoClean = clinerComas(a.usuario.nombre);
             strUsuarios +=datoClean+','+a.usuario.telefono+','+a.id+'\n';
-            /*
-            datoClean = clinerComas(a.usuario.telefono);
-            strUsuarios += datoClean+',';
-            strUsuarios += a.id+'\n';
-            */
+
             // pedido
             //console.log(a.id+','+a.usuario.uid+','+a.usuario.nombre+','+ new Date(a.fechaIngreso)+','+a.direccion+','+a.total);
             
@@ -83,26 +84,7 @@ let i = 0;
             strPedidos += new Date(a.fechaIngreso)+','+datoClean+','+a.total+'\n';
             
 
-
-            /*
-            if (a.direccion != null ) {
-                var coma = a.direccion.indexOf(',');
-                if (coma > -1) {
-                    console.log(a.direccion);
-                    direccionClean = a.direccion.substring(0,coma-1);
-                }else{
-                    direccionClean = a.direccion;
-                }
-            }else{
-                direccionClean ="caja";
-            }   
-            strPedidos += a.id+','+a.usuario.uid+','+a.usuario.nombre+','+ new Date(a.fechaIngreso)+','+direccionClean+','+a.total+'\n';
-           */
-
             //prodPedido
-
-
-
             for (let index = 0; index < a.productos.length; index++) {
                 //console.log(a.id+','+a.usuario.uid+','+a.productos[index].nombre+','+a.productos[index].cantidad+','+a.productos[index].costo+','+a.productos[index].id);
                 let idProd = a.productos[index].id ;
@@ -116,28 +98,39 @@ let i = 0;
 
                             strProdPedidos += a.id+','+a.usuario.uid+',';
                             datoClean =clinerComas(element.nombre);
-                            console.log(element.nombre+" "+datoClean);
-                            strProdPedidos += datoClean+','+element.cantidad+','+element.costo+','+element.id+'\n';
+                            //console.log(element.nombre+" "+datoClean);
+                            if (element.proveedor != 'undefined') {
+                                strProdPedidos += datoClean+','+element.cantidad+','+element.costo+','+element.id+','+element.proveedor+'\n';    
+                            } else {
+                                strProdPedidos += datoClean+','+element.cantidad+','+element.costo+','+element.id+','+'111'+'\n';
+                            }
                         }
                     }else{
                         datoClean =clinerComas(prod.nombre);
-                        console.log(prod.nombre+" "+datoClean);
+                        //console.log(prod.nombre+" "+datoClean);
                         strProdPedidos += a.id+','+a.usuario.uid+','+datoClean+','+a.productos[index].cantidad+','+prod.costo+','+prod.id+'\n';
                     }
                 }else{
-                    console.log("el producto no se encontro, con nombre: "+a.productos[index].nombre);
-                    strProdPedidos += a.id+','+a.usuario.uid+','+a.productos[index].nombre+','+a.productos[index].cantidad+','+a.productos[index].costo+','+a.productos[index].id+'\n';
+                    console.log("producto no encontrado "+a.productos[index.id]+" nombre: "+a.productos[index].nombre);
+                    strProdPedidos += a.id+','+a.usuario.uid+','+a.productos[index].nombre+','+a.productos[index].cantidad+','+a.productos[index].costo+','+a.productos[index].id+','+'111'+'\n';
                 }
                 //console.log(listaProd.findIndex( j => j.id === url));
-
-                
-                
             }
-
+            
         });
+        // proveedores
+        proveedores.forEach(doc =>{
+            let prov = doc.data();
+            console.log(prov.nombre);
+            strProveedor += prov.id+','+prov.nit+','+prov.nombre+','+prov.municipio+' '+prov.departamento+','+prov.direccion+','+prov.telefono+','+prov.regimen+','+prov.rotacionInventario+'\n';
+
+        })
+
+
         taskContainer.innerHTML = strUsuarios;
         taskContainer2.innerHTML = strPedidos;
         taskContainer3.innerHTML = strProdPedidos;
+        taskContainer4.innerHTML = strProveedor;
         /*
         fs.writeFile('Usuario.csv', strUsuarios, (err) => { 
       
